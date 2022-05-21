@@ -10,6 +10,9 @@ import UIKit
 class LogInViewController: UIViewController {
     
     private let nc = NotificationCenter.default
+    private let minNumberChar = 6
+    private let standartUserName = "Vasya"
+    private let standartPassword = "qwerty"
     
     private lazy var logoImageView: UIImageView = {
         let image = UIImageView()
@@ -63,7 +66,18 @@ class LogInViewController: UIViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.autocapitalizationType = .none
         textField.layer.sublayerTransform = CATransform3DMakeTranslation(15, 0, 0)
+        textField.addTarget(self, action: #selector(editingChanged(sender:)), for: .editingChanged)
         return textField
+    }()
+    
+    private lazy var passwordWarningLabel: UILabel = {
+        let label = UILabel()
+        label.text = "password is too short - must be at least \(minNumberChar) characters"
+        label.isHidden = true
+        label.textColor = .red
+        label.font = UIFont.systemFont(ofSize: 14.0, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var loginButton: UIButton = {
@@ -111,7 +125,90 @@ class LogInViewController: UIViewController {
     
     @objc private func buttonPressed() {
         let profileVc = ProfileViewController()
-        navigationController?.pushViewController(profileVc, animated: true)
+        let loginIsEmpty = checkLogin()
+        let passwordIsEmpty = checkPassword(loginIsEmpty)
+        
+        if loginIsEmpty && passwordIsEmpty {
+            let loginPasswordIsStandart = checkStandartLogoPass()
+            if loginPasswordIsStandart {
+            navigationController?.pushViewController(profileVc, animated: true)
+            } else {
+                makeAlert()
+            }
+        }
+    }
+    
+    @objc private func editingChanged(sender: UITextField) {
+        
+        if let text = sender.text, text.count < minNumberChar && text.count > 0 {
+            passwordWarningLabel.isHidden = false
+        } else {
+            passwordWarningLabel.isHidden = true
+        }
+    }
+    
+    private func checkLogin() -> Bool {
+     
+        if emailTextField.text!.isEmpty {
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.3,
+                           initialSpringVelocity: 0.2,
+                           options: .curveEaseInOut) {
+                self.emailTextField.layer.borderColor = UIColor.darkGray.cgColor
+                self.emailTextField.layer.borderWidth = 4
+            } completion: { _ in
+                UIView.animate(withDuration: 0.5) {
+                    self.emailTextField.layer.borderColor = UIColor.lightGray.cgColor
+                    self.emailTextField.layer.borderWidth = 0.5
+                }
+            }
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    private func checkPassword(_ loginIsEmpty: Bool) -> Bool {
+        var delay = 0.5
+        if loginIsEmpty {
+            delay = 0
+        }
+        if passwordTextField.text!.isEmpty {
+            UIView.animate(withDuration: 0.5,
+                           delay: delay,
+                           usingSpringWithDamping: 0.3,
+                           initialSpringVelocity: 0.2,
+                           options: .curveEaseInOut) {
+                self.passwordTextField.layer.borderColor = UIColor.darkGray.cgColor
+                self.passwordTextField.layer.borderWidth = 4
+            } completion: { _ in
+                UIView.animate(withDuration: 0.5) {
+                    self.passwordTextField.layer.borderColor = UIColor.lightGray.cgColor
+                    self.passwordTextField.layer.borderWidth = 0.5
+                }
+            }
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    private func checkStandartLogoPass() -> Bool {
+        
+        if emailTextField.text! == standartUserName && passwordTextField.text! == standartPassword {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private func makeAlert() {
+        let message = "Please check your login and password"
+        let alert = UIAlertController(title: "Authentication failed", message: message, preferredStyle: .actionSheet)
+        let doneAction = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(doneAction)
+        present(alert, animated: true)
     }
     
     private func hexStringToUIColor (hex:String) -> UIColor {
@@ -157,7 +254,7 @@ class LogInViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
-        [logoImageView, emailTextField, passwordTextField, loginButton].forEach { contentView.addSubview($0) }
+        [logoImageView, emailTextField, passwordTextField, passwordWarningLabel, loginButton].forEach { contentView.addSubview($0) }
         
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 120),
@@ -172,7 +269,13 @@ class LogInViewController: UIViewController {
             passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             passwordTextField.heightAnchor.constraint(equalToConstant: 50),
-            loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 16),
+            
+            passwordWarningLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 4),
+            passwordWarningLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            passwordWarningLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            passwordWarningLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            loginButton.topAnchor.constraint(equalTo: passwordWarningLabel.bottomAnchor, constant: 10),
             loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
