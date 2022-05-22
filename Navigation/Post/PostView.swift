@@ -1,33 +1,22 @@
 //
-//  PostTableViewCell.swift
+//  PostView.swift
 //  Navigation
 //
-//  Created by Кирилл on 14.05.2022.
+//  Created by Кирилл on 22.05.2022.
 //
 
 import UIKit
 
-class PostTableViewCell: UITableViewCell {
-    
+class PostView: UIView {
+
     private var likes = 0
-    private var views = 0
     private var postIndex = 0
-    var navigationController = UINavigationController()
-    
-    private lazy var postView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
-        return view
-    }()
     
     private lazy var postImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .black
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapOnImage)))
         return imageView
     }()
     
@@ -67,8 +56,9 @@ class PostTableViewCell: UITableViewCell {
         return label
     }()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .white
         layout()
     }
     
@@ -83,60 +73,44 @@ class PostTableViewCell: UITableViewCell {
         likesLabel.text = "Likes: \(String(model.likes))"
         viewsLabel.text = "Views: \(String(model.views))"
         likes = model.likes
-        views = model.views
         postIndex = indexPost
-    }
-    
-    private func customizeCell() {
-        postView.layer.borderWidth = 2
     }
     
     private func layout() {
         
         let constIndent: CGFloat = 16
         
-        [postView, authorLabel, postImageView, descriptionLabel, likesLabel, viewsLabel].forEach { contentView.addSubview($0) }
+        [authorLabel, postImageView, descriptionLabel, likesLabel, viewsLabel].forEach { self.addSubview($0) }
         
         NSLayoutConstraint.activate([
-            postView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: constIndent),
-            postView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            postView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            postView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            authorLabel.topAnchor.constraint(equalTo: postView.topAnchor),
-            authorLabel.leadingAnchor.constraint(equalTo: postView.leadingAnchor, constant: constIndent),
-            authorLabel.trailingAnchor.constraint(equalTo: postView.trailingAnchor),
+            authorLabel.topAnchor.constraint(equalTo: self.topAnchor),
+            authorLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: constIndent),
+            authorLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             authorLabel.heightAnchor.constraint(equalToConstant: 50),
             postImageView.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: constIndent),
-            postImageView.leadingAnchor.constraint(equalTo: postView.leadingAnchor),
-            postImageView.trailingAnchor.constraint(equalTo: postView.trailingAnchor),
+            postImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            postImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            postImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2),
             descriptionLabel.topAnchor.constraint(equalTo: postImageView.bottomAnchor, constant: constIndent),
-            descriptionLabel.leadingAnchor.constraint(equalTo: postView.leadingAnchor, constant: constIndent),
-            descriptionLabel.trailingAnchor.constraint(equalTo: postView.trailingAnchor, constant: -constIndent),
+            descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: constIndent),
+            descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -constIndent),
             likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: constIndent),
-            likesLabel.leadingAnchor.constraint(equalTo: postView.leadingAnchor, constant: constIndent),
-            likesLabel.trailingAnchor.constraint(equalTo: postView.trailingAnchor),
+            likesLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: constIndent),
+            likesLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             likesLabel.heightAnchor.constraint(equalToConstant: 50),
             viewsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: constIndent),
-            viewsLabel.trailingAnchor.constraint(equalTo: postView.trailingAnchor, constant: -constIndent),
+            viewsLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -constIndent),
             viewsLabel.heightAnchor.constraint(equalToConstant: 50),
-            viewsLabel.bottomAnchor.constraint(equalTo: postView.bottomAnchor)
+            viewsLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-        
     }
     
     @objc private func tapOnLike() {
         likes += 1
         likesLabel.text = "Likes: \(String(likes))"
         PostData.post[postIndex].likes = likes
+        let nc = NotificationCenter.default
+        nc.post(name: Notification.Name("ChangedPostData"), object: nil)
     }
-    
-    @objc private func tapOnImage() {
-        views += 1
-        viewsLabel.text = "Views: \(String(views))"
-        PostData.post[postIndex].views = views
-        let postDetail = PostViewController()
-        postDetail.post = Post(title: "Это пост", postIndex: postIndex)
-        navigationController.pushViewController(postDetail, animated: true)
-    }
-    
+
 }

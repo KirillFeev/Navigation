@@ -11,6 +11,14 @@ class PhotosViewController: UIViewController {
 
     private let photosModel = PhotosModel.makeModel()
     
+    private lazy var photoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         
@@ -44,6 +52,7 @@ class PhotosViewController: UIViewController {
     
     private func layout() {
         view.addSubview(collectionView)
+        view.addSubview(photoImageView)
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -67,6 +76,16 @@ extension PhotosViewController: UICollectionViewDataSource {
             cell.setupCell(photosModel[indexPath.row])
         }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        print("select \(indexPath.item)")
+        
+        UIView.animate(withDuration: 0.5) {
+            self.photoImageView.image = UIImage(named: "photo_1")
+            self.photoImageView.center = self.collectionView.center
+        }
     }
     
 }

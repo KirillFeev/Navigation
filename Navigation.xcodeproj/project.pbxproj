@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED0BEEF0283A6071001F120E /* PostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0BEEEF283A6071001F120E /* PostData.swift */; };
+		ED0BEEF5283A76A1001F120E /* PostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0BEEF4283A76A1001F120E /* PostView.swift */; };
 		ED241EE5282293EC00631B58 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED241EE4282293EC00631B58 /* AppDelegate.swift */; };
 		ED241EE7282293EC00631B58 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED241EE6282293EC00631B58 /* SceneDelegate.swift */; };
 		ED241EE9282293EC00631B58 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED241EE8282293EC00631B58 /* ViewController.swift */; };
@@ -30,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ED0BEEEF283A6071001F120E /* PostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostData.swift; sourceTree = "<group>"; };
+		ED0BEEF4283A76A1001F120E /* PostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostView.swift; sourceTree = "<group>"; };
 		ED241EE1282293EC00631B58 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED241EE4282293EC00631B58 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ED241EE6282293EC00631B58 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +69,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ED0BEEF1283A6AD8001F120E /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				ED30D2B7282C0EFE00FB6247 /* LogInViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		ED241ED8282293EC00631B58 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +99,7 @@
 				ED241EFC2822957000631B58 /* Profile */,
 				ED5ABB372833886100DDDFFC /* Post */,
 				ED5ABB362833881D00DDDFFC /* Photos */,
+				ED0BEEF1283A6AD8001F120E /* Login */,
 				ED241EF82822953B00631B58 /* MainTabBarViewController.swift */,
 				ED241EFA2822955C00631B58 /* FeedViewController.swift */,
 				ED241F01282297CA00631B58 /* PostViewController.swift */,
@@ -107,7 +120,6 @@
 			children = (
 				ED241EFD2822957000631B58 /* ProfileTableHederView.swift */,
 				ED241EFE2822957000631B58 /* ProfileViewController.swift */,
-				ED30D2B7282C0EFE00FB6247 /* LogInViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -129,6 +141,8 @@
 				EDE3001D28300D7800C1DBC1 /* PostTableViewCell.swift */,
 				EDE3001B282FF5A100C1DBC1 /* PostModel.swift */,
 				ED241F05282297E900631B58 /* Post.swift */,
+				ED0BEEEF283A6071001F120E /* PostData.swift */,
+				ED0BEEF4283A76A1001F120E /* PostView.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -205,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED241F02282297CA00631B58 /* PostViewController.swift in Sources */,
+				ED0BEEF0283A6071001F120E /* PostData.swift in Sources */,
 				EDE3001C282FF5A100C1DBC1 /* PostModel.swift in Sources */,
 				EDE3001E28300D7800C1DBC1 /* PostTableViewCell.swift in Sources */,
 				ED241EE9282293EC00631B58 /* ViewController.swift in Sources */,
@@ -220,6 +235,7 @@
 				ED241EE5282293EC00631B58 /* AppDelegate.swift in Sources */,
 				ED5ABB3928338E9300DDDFFC /* PhotosCollectionViewCell.swift in Sources */,
 				ED241EE7282293EC00631B58 /* SceneDelegate.swift in Sources */,
+				ED0BEEF5283A76A1001F120E /* PostView.swift in Sources */,
 				ED241F06282297E900631B58 /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

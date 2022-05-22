@@ -11,8 +11,8 @@ struct PostModel {
     let author: String
     let description: String
     let image: String
-    let likes: Int
-    let views: Int
+    var likes: Int
+    var views: Int
     
     static func makeModel() -> [PostModel] {
         var post = [PostModel]()

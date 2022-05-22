@@ -11,6 +11,8 @@ class ProfileViewController: UIViewController {
     
     private lazy var profileHeaderView = ProfileHeaderView()
     
+    private let nc = NotificationCenter.default
+    
     private lazy var tableView: UITableView = {
         let tabView = UITableView(frame: .zero, style: .grouped)
         tabView.translatesAutoresizingMaskIntoConstraints = false
@@ -21,12 +23,11 @@ class ProfileViewController: UIViewController {
         return tabView
     }()
     
-    private let postModel = PostModel.makeModel()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
         navigationController?.navigationBar.backgroundColor = .white
+        nc.addObserver(self, selector: #selector(ChangedPostData), name: Notification.Name("ChangedPostData"), object: nil)
         layout()
     }
     
@@ -40,6 +41,10 @@ class ProfileViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    @objc private func ChangedPostData() {
+        tableView.reloadData()
     }
     
 }
@@ -81,7 +86,7 @@ extension ProfileViewController: UITableViewDataSource {
         if section == 0 {
             return 1
         } else {
-            return postModel.count
+            return PostData.post.count
         }
     }
     
@@ -91,7 +96,8 @@ extension ProfileViewController: UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as! PostTableViewCell
-            cell.setupCell(postModel[indexPath.row])
+            cell.navigationController = self.navigationController!
+            cell.setupCell(PostData.post[indexPath.row], indexPost: indexPath.row)
             return cell
         }
     }

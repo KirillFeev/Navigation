@@ -66,7 +66,7 @@ class ProfileHeaderView: UIView {
     
     private lazy var setStatusButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Show status", for: .normal)
+        button.setTitle("Set status", for: .normal)
         button.backgroundColor = .blue
         button.layer.cornerRadius = 4
         button.titleLabel?.textColor = .white
@@ -123,14 +123,14 @@ class ProfileHeaderView: UIView {
             closeButton.widthAnchor.constraint(equalToConstant: 40),
             
             fullNameLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 27),
-            fullNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + 110 + 16),
+            fullNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + constWidthAvatar + 16),
             fullNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             fullNameLabel.heightAnchor.constraint(equalToConstant: 50),
-            statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + 110 + 16),
+            statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + constWidthAvatar + 16),
             statusTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            statusTextField.heightAnchor.constraint(equalToConstant: 50),
+            statusTextField.heightAnchor.constraint(equalToConstant: 30),
             statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -34),
-            setStatusButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 16 + 110 + 16),
+            setStatusButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 16 + constWidthAvatar + 16),
             setStatusButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             setStatusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             setStatusButton.heightAnchor.constraint(equalToConstant: 50)
@@ -148,8 +148,12 @@ class ProfileHeaderView: UIView {
     }
     
     @objc private func buttonPressed() {
-        let text = statusTextField.text!
-        print(text)
+        let statusIsEmpty = checkStatus()
+        
+        if statusIsEmpty {
+            let text = statusTextField.text!
+            print(text)
+        }
     }
     
     @objc private func closePressed() {
@@ -185,6 +189,27 @@ class ProfileHeaderView: UIView {
             }
         }
         
+    }
+    
+    private func checkStatus() -> Bool {
+        
+        if statusTextField.text!.isEmpty {
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.3,
+                           initialSpringVelocity: 0.2,
+                           options: .curveEaseInOut) {
+                self.statusTextField.layer.borderColor = UIColor.darkGray.cgColor
+                self.statusTextField.layer.borderWidth = 4
+            } completion: { _ in
+                UIView.animate(withDuration: 0.5) {
+                    self.statusTextField.layer.borderWidth = 0
+                }
+            }
+            return false
+        } else {
+            return true
+        }
     }
     
 }
