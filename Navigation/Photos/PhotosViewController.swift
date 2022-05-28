@@ -83,6 +83,7 @@ class PhotosViewController: UIViewController {
             UIView.animate(withDuration: 0.5) {
                 self.photoImageView.isHidden = true
                 self.blackView.isHidden = true
+                self.navigationController?.navigationBar.isHidden = false
             }
         }
     }
@@ -137,6 +138,7 @@ extension PhotosViewController: UICollectionViewDataSource {
         let imageName = "photo_\(indexPath.item + 1)"
         
         UIView.animate(withDuration: 0.5) {
+            self.navigationController?.navigationBar.isHidden = true
             self.photoImageView.isHidden = false
             self.blackView.isHidden = false
             self.photoImageView.image = UIImage(named: imageName)

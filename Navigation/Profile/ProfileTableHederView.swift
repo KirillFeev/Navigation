@@ -52,15 +52,19 @@ class ProfileHeaderView: UIView {
     private lazy var statusLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Waiting for something..."
         return label
     }()
     
     private lazy var statusTextField: UITextField = {
         let textField = UITextField()
-        textField.text = "Waiting for something..."
+        textField.placeholder = "Waiting for something..."
         textField.textColor = .gray
         textField.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.cornerRadius = 10
+        textField.layer.sublayerTransform = CATransform3DMakeTranslation(8, 0, 0)
+        textField.backgroundColor = .white
         return textField
     }()
     
@@ -99,7 +103,7 @@ class ProfileHeaderView: UIView {
     
     private func layout() {
         
-        [fullNameLabel, statusTextField, setStatusButton, blackView, avatarImageView, closeButton].forEach { self.addSubview($0) }
+        [fullNameLabel, statusLabel, statusTextField, setStatusButton, blackView, avatarImageView, closeButton].forEach { self.addSubview($0) }
         
         topAvatarImageView = avatarImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16)
         leadingAvatarImageView = avatarImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16)
@@ -126,10 +130,17 @@ class ProfileHeaderView: UIView {
             fullNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + constWidthAvatar + 16),
             fullNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             fullNameLabel.heightAnchor.constraint(equalToConstant: 50),
+            
+            statusLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + constWidthAvatar + 16),
+            statusLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            statusLabel.heightAnchor.constraint(equalToConstant: 30),
+            statusLabel.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -34),
+            
             statusTextField.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16 + constWidthAvatar + 16),
             statusTextField.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            statusTextField.heightAnchor.constraint(equalToConstant: 30),
-            statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -34),
+            statusTextField.heightAnchor.constraint(equalToConstant: 20),
+            statusTextField.bottomAnchor.constraint(equalTo: setStatusButton.topAnchor, constant: -8),
+            
             setStatusButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 16 + constWidthAvatar + 16),
             setStatusButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             setStatusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
@@ -152,6 +163,7 @@ class ProfileHeaderView: UIView {
         
         if statusIsEmpty {
             let text = statusTextField.text!
+            statusLabel.text = text
             print(text)
         }
     }
